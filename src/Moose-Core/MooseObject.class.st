@@ -215,22 +215,25 @@ MooseObject >> announcer: anAnnouncer [
 
 { #category : #accessing }
 MooseObject >> attributeAt: name ifAbsent: aBlock [
-	1 to: entityAttributes size do: [ :n | name == (entityAttributes at: n) key ifTrue: [ ^ (entityAttributes at: n) value ] ].
-	^ aBlock value
+	^ self entityAttributes at: name ifAbsent: aBlock
+	"1 to: entityAttributes size do: [ :n | name == (entityAttributes at: n) key ifTrue: [ ^ (entityAttributes at: n) value ] ].
+	^ aBlock value"
 ]
 
 { #category : #accessing }
 MooseObject >> attributeAt: name ifAbsentPut: aBlock [
-	1 to: entityAttributes size do: [ :n | name == (entityAttributes at: n) key ifTrue: [ ^ (entityAttributes at: n) value ] ].
+	^ self entityAttributes at: name ifAbsentPut: aBlock
+	"1 to: entityAttributes size do: [ :n | name == (entityAttributes at: n) key ifTrue: [ ^ (entityAttributes at: n) value ] ].
 	entityAttributes := entityAttributes copyWith: name -> aBlock value.
-	^ entityAttributes last value
+	^ entityAttributes last value"
 ]
 
 { #category : #accessing }
 MooseObject >> attributeAt: name put: value [
-	1 to: entityAttributes size do: [ :n | name == (entityAttributes at: n) key ifTrue: [ ^ (entityAttributes at: n) value: value ] ].
+	^ self entityAttributes at: name put: value
+	"1 to: entityAttributes size do: [ :n | name == (entityAttributes at: n) key ifTrue: [ ^ (entityAttributes at: n) value: value ] ].
 	entityAttributes := entityAttributes copyWith: name -> value.
-	^ entityAttributes last value
+	^ entityAttributes last value"
 ]
 
 { #category : #accessing }
@@ -289,7 +292,7 @@ MooseObject >> displayStringOn: aStream [
 
 { #category : #accessing }
 MooseObject >> entityAttributes [
-	^ entityAttributes
+	^ entityAttributes ifNil: [ entityAttributes := SmallDictionary new ]
 ]
 
 { #category : #accessing }
@@ -518,12 +521,14 @@ MooseObject >> propertyNamed: name put: value [
 
 { #category : #accessing }
 MooseObject >> removeAttribute: aSymbol [
-	| each |
+	^ self entityAttributes removeKey: aSymbol 
+	
+	"| each |
 	1 to: entityAttributes size do: [ :n | 
 		aSymbol == (each := entityAttributes at: n) key
 			ifTrue: [ entityAttributes := entityAttributes copyWithout: each.
 				^ true ] ].
-	^ false
+	^ false"
 ]
 
 { #category : #accessing }
@@ -551,7 +556,7 @@ MooseObject >> resetMooseName [
 
 { #category : #initialization }
 MooseObject >> resetPrivateState [
-	entityAttributes := #().
+	entityAttributes := nil.
 	cache := SmallDictionary new
 ]
 
